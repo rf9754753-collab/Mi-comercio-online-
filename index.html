@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tienda Online</title>
+    <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="logo">🛒 TIENDA</div>
+        <nav class="nav-links">
+            <a href="#" data-page="novedades">NOVEDADES</a>
+            <a href="#" data-page="ofertas">OFERTAS</a>
+            <a href="#" data-page="soporte">SOPORTE</a>
+            <a href="#" data-page="carrito">CARRITO (<span id="cart-count">0</span>)</a>
+        </nav>
+    </header>
+
+    <!-- ===== CREDENCIALES ===== -->
+    <div class="credentials">
+        <input type="text" id="nombreInput" placeholder="Nombre" value="usuario_demo" />
+        <input type="text" id="cedulaInput" placeholder="Cédula" value="V12345678" />
+        <button id="loadProductsBtn">📦 Cargar Productos</button>
+        <button id="clearProductsBtn" style="background:#c62828;">🗑️ Limpiar Productos</button>
+        <span style="color:#888;font-size:0.8rem;margin-left:auto;">
+            API: unefa2026.onrender.com
+        </span>
+    </div>
+
+    <!-- ===== MAIN ===== -->
+    <div class="main-container">
+
+        <!-- SIDEBAR FILTROS -->
+        <aside class="sidebar" id="sidebar">
+            <h3>🔍 Filtros</h3>
+
+            <div class="filter-group">
+                <h4>Marca</h4>
+                <label><input type="checkbox" class="filter-checkbox" data-filter="marca" value="Marca 1" /> Marca 1</label>
+                <label><input type="checkbox" class="filter-checkbox" data-filter="marca" value="Marca 2" /> Marca 2</label>
+                <label><input type="checkbox" class="filter-checkbox" data-filter="marca" value="Marca 3" /> Marca 3</label>
+            </div>
+
+            <div class="filter-group">
+                <h4>Precio</h4>
+                <label><input type="checkbox" class="filter-checkbox" data-filter="precio" value="0-500" /> $0 - $500</label>
+                <label><input type="checkbox" class="filter-checkbox" data-filter="precio" value="500-1000" /> $500 - $1000</label>
+                <label><input type="checkbox" class="filter-checkbox" data-filter="precio" value="1000+" /> $1000+</label>
+            </div>
+
+            <div class="filter-group">
+                <h4>Género</h4>
+                <label><input type="checkbox" class="filter-checkbox" data-filter="genero" value="Hombre" /> Hombre</label>
+                <label><input type="checkbox" class="filter-checkbox" data-filter="genero" value="Mujer" /> Mujer</label>
+                <label><input type="checkbox" class="filter-checkbox" data-filter="genero" value="Unisex" /> Unisex</label>
+            </div>
+
+            <div class="filter-group">
+                <h4>Muitos</h4>
+                <select id="muitosSelect">
+                    <option value="">Seleccionar</option>
+                    <option value="opcion1">Opción 1</option>
+                    <option value="opcion2">Opción 2</option>
+                    <option value="opcion3">Opción 3</option>
+                </select>
+            </div>
+
+            <button id="applyFiltersBtn" class="filter-btn">Aplicar Filtros</button>
+            <button id="clearFiltersBtn" class="clear-btn">Limpiar Filtros</button>
+        </aside>
+
+        <!-- SECCIÓN DE PRODUCTOS -->
+        <section class="products-section">
+            <div id="productsContainer">
+                <div class="loading">🔄 Cargando productos...</div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ===== MODAL DE SOPORTE ===== -->
+    <div id="supportModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>📞 Soporte Técnico</h2>
+            <p>Selecciona el tipo de error que estás presentando:</p>
+            <div class="support-options">
+                <button class="support-option" data-error="Error de conexión">🔌 Error de conexión</button>
+                <button class="support-option" data-error="Error de autenticación">🔐 Error de autenticación</button>
+                <button class="support-option" data-error="Error de carga de productos">📦 Error de carga de productos</button>
+                <button class="support-option" data-error="Error de pago">💳 Error de pago</button>
+                <button class="support-option" data-error="Otro">❓ Otro</button>
+            </div>
+            <div id="customErrorContainer" style="display:none; margin-top: 1rem;">
+                <label for="customErrorDesc">Describe tu problema:</label>
+                <textarea id="customErrorDesc" rows="4" style="width:100%; padding:0.5rem; background:#333; color:white; border:1px solid #555; border-radius:4px;"></textarea>
+                <button id="sendSupportBtn" style="margin-top:0.5rem; padding:0.5rem 1.5rem; background:#0d47a1; color:white; border:none; border-radius:4px; cursor:pointer;">Enviar Reporte</button>
+            </div>
+            <div id="supportResponse" style="margin-top:1rem; color:#90caf9;"></div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL DE CARRITO ===== -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>🛒 Mi Carrito</h2>
+            <div id="cartItemsContainer">
+                <p style="color:#888;">No hay productos en el carrito</p>
+            </div>
+            <div id="cartActions" style="display:none; margin-top: 1rem; border-top: 1px solid #444; padding-top: 1rem;">
+                <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+                    <label style="display:flex; align-items:center; gap:0.5rem;">
+                        <input type="checkbox" id="facturaCheck" /> ¿Desea factura?
+                    </label>
+                    <button id="checkoutBtn" style="background:#2e7d32; padding:0.5rem 1.5rem; border:none; border-radius:4px; color:white; font-weight:bold; cursor:pointer;">
+                        💳 Comprar
+                    </button>
+                    <button id="clearCartBtn" style="background:#c62828; padding:0.5rem 1.5rem; border:none; border-radius:4px; color:white; font-weight:bold; cursor:pointer;">
+                        🗑️ Vaciar Carrito
+                    </button>
+                </div>
+            </div>
+            <div id="checkoutResponse" style="margin-top:1rem;"></div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <p>&copy; 2026 Rafael Flores - Ingeniería de Sistemas. Todos los derechos reservados.</p>
+        <p style="font-size:0.8rem; color:#888; margin-top:0.5rem;">
+            Desarrollado con ❤️ para la comunidad
+        </p>
+    </footer>
+
+    <!-- ===== UN SOLO SCRIPT ===== -->
+    <script src="java.js"></script>
+</body>
+</html>
